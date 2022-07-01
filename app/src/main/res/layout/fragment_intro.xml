@@ -7,7 +7,7 @@
 
         <variable
             name="introViewModel"
-            type="com.example.learning.ui.intro.IntroViewModel" />
+            type="com.example.learning.presentation.intro.IntroViewModel" />
     </data>
 
     <FrameLayout
@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/unsplash_intro_white"
+            android:src="@drawable/tangerine"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -29,6 +29,7 @@
             android:layout_gravity="center_vertical|bottom"
             android:layout_marginHorizontal="30dp"
             android:layout_marginBottom="100dp"
+            android:textColor="@color/white"
             android:text="@string/welcome_to_fruit_app"
             android:textSize="30sp" />
 

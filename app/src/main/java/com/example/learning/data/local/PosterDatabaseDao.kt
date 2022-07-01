@@ -1,16 +1,17 @@
 package com.example.learning.data.local
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
 interface PosterDatabaseDao {
 
     @Query("SELECT * FROM poster")
-    fun getAll(): List<Poster>
+    fun getAllPosters(): LiveData<List<Poster>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertPosters(vararg posters: Poster)
+    suspend fun insertPosters(vararg posters: Poster)
 
     @Delete
-    fun deletePosters(poster: Poster)
+    suspend fun deletePosters(poster: Poster)
 }

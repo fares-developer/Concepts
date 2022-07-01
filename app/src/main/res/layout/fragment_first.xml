@@ -7,7 +7,7 @@
 
         <variable
             name="firstViewModel"
-            type="com.example.learning.ui.first.FirstViewModel" />
+            type="com.example.learning.presentation.first.FirstViewModel" />
     </data>
 
     <LinearLayout
@@ -18,10 +18,12 @@
         android:paddingBottom="40dp"
         tools:context=".ui.first.FirstFragment">
 
-        <include layout="@layout/list_posters"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/post_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"/>
+            android:layout_height="300dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <TextView
             android:id="@+id/texto"

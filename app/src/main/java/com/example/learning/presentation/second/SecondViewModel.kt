@@ -1,4 +1,4 @@
-package com.example.learning.ui.second
+package com.example.learning.presentation.second
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

@@ -7,14 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.learning.R
-import com.example.learning.data.local.Poster
 import com.example.learning.data.local.PosterDatabase
 import com.example.learning.databinding.FragmentFirstBinding
-import kotlinx.coroutines.launch
+import com.example.learning.presentation.first.FirstViewModel
+import com.example.learning.ui.first.adapter.PosterAdapter
 
 class FirstFragment : Fragment() {
 
@@ -29,13 +29,24 @@ class FirstFragment : Fragment() {
         Log.i("Fragment", "FirstFragment Created")
 
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_first, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner //Esto nos permite eliminar el observer
-        val application = requireNotNull(this.activity).application
+        //Esto nos permite eliminar el observer y hace que la vista se actualice automáticamente
+        binding.lifecycleOwner = viewLifecycleOwner
 
+
+        val application = requireNotNull(this.activity).application
         val database = PosterDatabase.getInstance(application).posterDatabaseDao
         viewModelFac = FirstViewModel.FirstViewModelFactory(application,database)
         viewModel = ViewModelProvider(this, viewModelFac)[FirstViewModel::class.java]
         binding.firstViewModel = viewModel
+
+        //Asignación del adapter y carga de los post desde base de datos
+        var adapter = PosterAdapter()
+        binding.postList.adapter = adapter
+        viewModel.posters.observe(viewLifecycleOwner) {
+            it?.let{
+                adapter.posters = it
+            }
+        }
 
 
         //Initial values assignments

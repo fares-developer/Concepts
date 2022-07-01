@@ -1,9 +1,10 @@
-package com.example.learning.ui.intro
+package com.example.learning.presentation.intro
 
 import androidx.lifecycle.*
 
 class IntroViewModel : ViewModel() {
 
+    //Navigation LiveData
     private var _navigateTo = MutableLiveData<Boolean>()
     val navigateTo: LiveData<Boolean> get() = _navigateTo
 
@@ -26,6 +27,5 @@ class IntroViewModel : ViewModel() {
 
             throw IllegalArgumentException("No se reconoce el Factory")
         }
-
     }
 }

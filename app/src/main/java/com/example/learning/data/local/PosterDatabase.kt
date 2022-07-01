@@ -19,7 +19,8 @@ abstract class PosterDatabase : RoomDatabase() {
         /**
          * @param context hace referencia al contexto de la aplicación.
          * El syschronized es utilizado muy a menudo en programación multihilo, en este caso
-         * impide que otro hilo pueda acceder a este método
+         * impide que otro hilo pueda acceder a este método y así sólo existirá una instancia
+         * de la base de datos
          */
         fun getInstance(context: Context): PosterDatabase {
             synchronized(this) {

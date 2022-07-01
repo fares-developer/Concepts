@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.learning.R
 import com.example.learning.databinding.FragmentSecondBinding
+import com.example.learning.presentation.second.SecondViewModel
 
 class SecondFragment : Fragment() {
 
