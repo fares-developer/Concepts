@@ -9,8 +9,8 @@ import com.example.learning.data.local.Poster
 import com.example.learning.databinding.PostItemViewBinding
 
 //ListAdapter avisa al daptador cuando se actualiza la lista de items
-class PosterAdapter
-    : ListAdapter<Poster, PosterAdapter.ViewHolder>(PosterDiffCallback()) {
+class PosterAdapter(val clickListener: PosterListener) :
+    ListAdapter<Poster, PosterAdapter.ViewHolder>(PosterDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
@@ -18,20 +18,22 @@ class PosterAdapter
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(getItem(position)!!,clickListener)
     }
 
 
-    class ViewHolder private constructor(itemView: PostItemViewBinding) : RecyclerView.ViewHolder(itemView.root) {
+    class ViewHolder private constructor(itemView: PostItemViewBinding) :
+        RecyclerView.ViewHolder(itemView.root) {
 
-        fun bind(poster: Poster) {
+        fun bind(poster: Poster, clickListener: PosterListener) {
+            binding.clickListener = clickListener
             binding.poster = poster
             binding.executePendingBindings()
         }
 
         companion object { //Para que pueda acceder cualquier ViewHolder
 
-            private lateinit var binding:PostItemViewBinding
+            private lateinit var binding: PostItemViewBinding
 
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
@@ -56,7 +58,7 @@ class PosterDiffCallback : DiffUtil.ItemCallback<Poster>() {
     }
 }
 
-class PosterListener(val clickListener:(id:Long)->Unit) {
+class PosterListener(val clickListener: (id: Long) -> Unit) {
 
     fun onClick(poster: Poster) = clickListener(poster.id)
 }

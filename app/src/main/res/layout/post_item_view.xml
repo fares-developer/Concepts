@@ -8,6 +8,10 @@
         <variable
             name="poster"
             type="com.example.learning.data.local.Poster" />
+        
+        <variable
+            name="clickListener"
+            type="com.example.learning.ui.first.adapter.PosterListener" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -17,6 +21,7 @@
         android:layout_height="300dp"
         android:layout_margin="20dp"
         app:cardCornerRadius="16dp"
+        android:onClick="@{()-> clickListener.onClick(poster)}"
         app:cardElevation="8dp">
 
         <LinearLayout

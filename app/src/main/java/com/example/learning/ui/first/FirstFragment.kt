@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +15,7 @@ import com.example.learning.data.local.PosterDatabase
 import com.example.learning.databinding.FragmentFirstBinding
 import com.example.learning.presentation.first.FirstViewModel
 import com.example.learning.ui.first.adapter.PosterAdapter
+import com.example.learning.ui.first.adapter.PosterListener
 
 class FirstFragment : Fragment() {
 
@@ -40,7 +42,9 @@ class FirstFragment : Fragment() {
         binding.firstViewModel = viewModel
 
         //Asignación del adapter y carga de los post desde base de datos
-        val adapter = PosterAdapter()
+        val adapter = PosterAdapter(PosterListener {
+            Toast.makeText(this.requireContext(),"Has pulsado la Card ",Toast.LENGTH_SHORT).show()
+        })
         binding.postList.adapter = adapter
         viewModel.posters.observe(viewLifecycleOwner) {
             it?.let{
