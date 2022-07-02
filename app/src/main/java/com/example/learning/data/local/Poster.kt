@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Poster(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
     @ColumnInfo(name = "pos_author") val author: String?,
     @ColumnInfo(name = "pos_downloads") val postDownloads: Int?,
     @ColumnInfo(name = "pos_path") val postPath:String?

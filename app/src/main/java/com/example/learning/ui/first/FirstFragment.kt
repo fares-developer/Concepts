@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.learning.R
@@ -29,6 +28,7 @@ class FirstFragment : Fragment() {
         Log.i("Fragment", "FirstFragment Created")
 
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_first, container, false)
+
         //Esto nos permite eliminar el observer y hace que la vista se actualice automáticamente
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -40,14 +40,13 @@ class FirstFragment : Fragment() {
         binding.firstViewModel = viewModel
 
         //Asignación del adapter y carga de los post desde base de datos
-        var adapter = PosterAdapter()
+        val adapter = PosterAdapter()
         binding.postList.adapter = adapter
         viewModel.posters.observe(viewLifecycleOwner) {
             it?.let{
-                adapter.posters = it
+                adapter.submitList(it) //Esto indica a listAdapter que una nueva versión de la lista
             }
         }
-
 
         //Initial values assignments
         binding.texto.text = viewModel.textSuccess.value
@@ -77,6 +76,7 @@ class FirstFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel
         Log.i("Fragment", "FirstFragment destroyed")
     }
 }

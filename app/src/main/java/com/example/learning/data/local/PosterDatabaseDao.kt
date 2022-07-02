@@ -10,8 +10,8 @@ interface PosterDatabaseDao {
     fun getAllPosters(): LiveData<List<Poster>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPosters(vararg posters: Poster)
+    suspend fun insertPoster(poster: Poster)
 
     @Delete
-    suspend fun deletePosters(poster: Poster)
+    suspend fun deletePosters(posters: Poster)
 }

@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 class FirstViewModel(
     application: Application,
-    val database: PosterDatabaseDao
+    private val database: PosterDatabaseDao
 
 ) : AndroidViewModel(application) {
 
@@ -41,41 +41,10 @@ class FirstViewModel(
 
     val posters: LiveData<List<Poster>> = database.getAllPosters()
 
+
     private suspend fun insertPosters() {
-        viewModelScope.launch {
-            database.insertPosters(
-                Poster(
-                    author = "Charles Deluvio", postDownloads = 117559,
-                    postPath = "https://images.unsplash.com/photo-1517282009859-f000ec3b26fe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-                ),
-
-                Poster(
-                    author = "Marcus Wallis", postDownloads = 13576,
-                    postPath = "https://images.unsplash.com/photo-1526865906320-0200a6e2c7f0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80"
-                ),
-
-                Poster(
-                    author = "Mae Mu", postDownloads = 111915,
-                    postPath = "https://images.unsplash.com/photo-1552010099-5dc86fcfaa38?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
-                ),
-
-                Poster(
-                    author = "Tagerine Newt", postDownloads = 24956,
-                    postPath = "https://images.unsplash.com/photo-1618897996318-5a901fa6ca71?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
-                ),
-
-                Poster(
-                    author = "Melisa Belanger", postDownloads = 11628,
-                    postPath = "https://images.unsplash.com/photo-1594002348772-bc0cb57ade8b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-                ),
-
-                Poster(
-                    author = "Birgith Roosipuu", postDownloads = 7213,
-                    postPath = "https://images.unsplash.com/photo-1597269391563-7c7837196d69?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-                )
-
-
-            )
+        FirstViewModel.posters.forEach {
+            database.insertPoster(it)
         }
     }
 
@@ -87,6 +56,11 @@ class FirstViewModel(
 
     override fun onCleared() {
         super.onCleared()
+        viewModelScope.launch {
+            FirstViewModel.posters.forEach {
+                database.deletePosters(it)
+            }
+        }
         Log.i("ViewModel", "ViewModel destroyed")
     }
 
@@ -107,6 +81,42 @@ class FirstViewModel(
         _navigateTo.value = true
     }
 
+    companion object {
+
+
+
+        private val posters: List<Poster> = listOf(
+            Poster(
+                author = "Charles Deluvio", postDownloads = 117559,
+                postPath = "https://images.unsplash.com/photo-1517282009859-f000ec3b26fe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+            ),
+
+            Poster(
+                author = "Marcus Wallis", postDownloads = 13576,
+                postPath = "https://images.unsplash.com/photo-1526865906320-0200a6e2c7f0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80"
+            ),
+
+            Poster(
+                author = "Mae Mu", postDownloads = 111915,
+                postPath = "https://images.unsplash.com/photo-1552010099-5dc86fcfaa38?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
+            ),
+
+            Poster(
+                author = "Tagerine Newt", postDownloads = 24956,
+                postPath = "https://images.unsplash.com/photo-1618897996318-5a901fa6ca71?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
+            ),
+
+            Poster(
+                author = "Melisa Belanger", postDownloads = 11628,
+                postPath = "https://images.unsplash.com/photo-1594002348772-bc0cb57ade8b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+            ),
+
+            Poster(
+                author = "Birgith Roosipuu", postDownloads = 7213,
+                postPath = "https://images.unsplash.com/photo-1597269391563-7c7837196d69?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+            )
+        )
+    }
 
     @Suppress("UNCHECKED_CAST")
     class FirstViewModelFactory(

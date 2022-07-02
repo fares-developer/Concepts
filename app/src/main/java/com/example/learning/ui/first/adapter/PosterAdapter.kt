@@ -1,56 +1,62 @@
 package com.example.learning.ui.first.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.learning.R
 import com.example.learning.data.local.Poster
 import com.example.learning.databinding.PostItemViewBinding
 
-class PosterAdapter : RecyclerView.Adapter<PosterAdapter.ViewHolder>() {
-
-    var posters = listOf<Poster>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+//ListAdapter avisa al daptador cuando se actualiza la lista de items
+class PosterAdapter
+    : ListAdapter<Poster, PosterAdapter.ViewHolder>(PosterDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = posters[position]
+        val item = getItem(position)
         holder.bind(item)
     }
 
-    override fun getItemCount(): Int = posters.size
 
-
-    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        private val binding = PostItemViewBinding.bind(itemView)
+    class ViewHolder private constructor(itemView: PostItemViewBinding) : RecyclerView.ViewHolder(itemView.root) {
 
         fun bind(poster: Poster) {
-
-            binding.postAuthor.text = poster.author
-            if (poster.postPath != null)
-                Glide.with(itemView.context).load(poster.postPath).into(binding.postImage)
-            else
-                binding.postImage.setImageResource(R.mipmap.ic_launcher)
-
-            binding.postDownloads.text = poster.postDownloads.toString()
+            binding.poster = poster
+            binding.executePendingBindings()
         }
 
-        companion object { //Esto es así para que puede acceder cualquier ViewHolder
+        companion object { //Para que pueda acceder cualquier ViewHolder
+
+            private lateinit var binding:PostItemViewBinding
+
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                return ViewHolder(
-                    layoutInflater.inflate(R.layout.post_item_view, parent, false)
-                )
+                binding = PostItemViewBinding.inflate(layoutInflater, parent, false)
+                return ViewHolder(binding)
             }
         }
     }
+}
+
+/**
+ * Esta clase es para trabajar con DiffUtil
+ */
+class PosterDiffCallback : DiffUtil.ItemCallback<Poster>() {
+
+    override fun areItemsTheSame(oldItem: Poster, newItem: Poster): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Poster, newItem: Poster): Boolean {
+        return oldItem == newItem
+    }
+}
+
+class PosterListener(val clickListener:(id:Long)->Unit) {
+
+    fun onClick(poster: Poster) = clickListener(poster.id)
 }
