@@ -22,3 +22,23 @@ trabajar con la versión __2.5.0-alpha02__ de Room
 
 2. Para ello introducimos el concepto de DiffUtil para actualizar
 sólo las vistas que han cambiado
+
+3. La solución pasa por eliminar el autogenerate en el Entity
+porque con esta anotación hace que el replace del dao haga su trabajo
+ya que siempre se generan pk nuevas por lo tanto cada vez que se inicia vuelva
+a introducir los posters y se duplican. Para ello heredamos de la interfaz 
+__LifecycleEventObserver__ la cual nos permite implementar un método con el que
+le digamos a la interfaz que sólo inserte los datos cuando se crea el 
+viewModel 
+
+` 
+override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+    if(event == Lifecycle.Event.ON_CREATE) {
+        viewModelScope.launch {
+            FirstViewModel.posters.forEach {
+                database.insertPoster(it)
+            }
+        }
+    }
+} 
+`

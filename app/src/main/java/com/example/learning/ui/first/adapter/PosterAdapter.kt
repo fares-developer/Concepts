@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.learning.data.local.Poster
+import com.example.learning.data.model.Poster
 import com.example.learning.databinding.PostItemViewBinding
 
 //ListAdapter avisa al daptador cuando se actualiza la lista de items
@@ -17,7 +17,6 @@ class PosterAdapter(val clickListener: PosterListener) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
         holder.bind(getItem(position)!!,clickListener)
     }
 

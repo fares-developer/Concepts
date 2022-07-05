@@ -2,6 +2,7 @@ package com.example.learning.data.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.example.learning.data.model.Poster
 
 @Dao
 interface PosterDatabaseDao {

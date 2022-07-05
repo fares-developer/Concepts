@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.learning.data.model.Poster
 
 @Database(entities = [Poster::class], version = 1, exportSchema = false)
 abstract class PosterDatabase : RoomDatabase() {

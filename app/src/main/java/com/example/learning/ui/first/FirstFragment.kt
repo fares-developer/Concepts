@@ -35,26 +35,25 @@ class FirstFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
 
+        //Inicialización del viewModel y de la instancia de BD
         val application = requireNotNull(this.activity).application
         val database = PosterDatabase.getInstance(application).posterDatabaseDao
-        viewModelFac = FirstViewModel.FirstViewModelFactory(application,database)
+        viewModelFac = FirstViewModel.FirstViewModelFactory(application, database)
         viewModel = ViewModelProvider(this, viewModelFac)[FirstViewModel::class.java]
         binding.firstViewModel = viewModel
 
+
         //Asignación del adapter y carga de los post desde base de datos
         val adapter = PosterAdapter(PosterListener {
-            Toast.makeText(this.requireContext(),"Has pulsado la Card ",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this.requireContext(), "Has pulsado la Card $it ", Toast.LENGTH_SHORT)
+                .show()
         })
         binding.postList.adapter = adapter
         viewModel.posters.observe(viewLifecycleOwner) {
-            it?.let{
+            it?.let {
                 adapter.submitList(it) //Esto indica a listAdapter que una nueva versión de la lista
             }
         }
-
-        //Initial values assignments
-        binding.texto.text = viewModel.textSuccess.value
-        binding.countTxt.text = viewModel.count.value.toString()
 
         viewModel.navigatTo.observe(viewLifecycleOwner) {
             if (it) {
@@ -65,11 +64,9 @@ class FirstFragment : Fragment() {
         return binding.root
     }
 
-    private fun navigateTo() {
+     private fun navigateTo() {
         findNavController().navigate(
-            FirstFragmentDirections.actionFirstFragmentToSecondFragment(
-                binding.texto.text.toString()
-            )
+            FirstFragmentDirections.actionFirstFragmentToSecondFragment()
         )
     }
 

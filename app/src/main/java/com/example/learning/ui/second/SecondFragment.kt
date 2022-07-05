@@ -28,7 +28,7 @@ class SecondFragment : Fragment() {
         viewModelFact = SecondViewModel.SecondViewModelFactory()
         viewModel = ViewModelProvider(this,viewModelFact)[SecondViewModel::class.java]
 
-        binding.texto.text = arguments?.getString("Texto").toString()
+        //binding.texto.text = arguments?.getString("Texto").toString()
 
         binding.button.setOnClickListener {
             findNavController().navigate(SecondFragmentDirections.actionSecondFragmentToFirstFragment())

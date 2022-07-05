@@ -22,9 +22,6 @@
         <action
             android:id="@+id/action_secondFragment_to_firstFragment"
             app:destination="@id/firstFragment" />
-        <argument
-            android:name="Texto"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/introFragment"
