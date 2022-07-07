@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="firstViewModel"
             type="com.example.learning.presentation.first.FirstViewModel" />
@@ -12,35 +13,62 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="top"
         android:orientation="vertical"
-        android:paddingBottom="40dp"
+        android:gravity="center"
         tools:context=".ui.first.FirstFragment">
 
-        <TextView android:id="@+id/header_posters"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/posters_header"
-            android:layout_marginVertical="6dp"
-            android:layout_marginHorizontal="8dp"
-            android:padding="8dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/post_list"
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-        <Button
-            android:id="@+id/boton"
+        <ProgressBar
+            android:id="@+id/progres_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginVertical="10dp"
-            android:onClick="@{()->firstViewModel.navigateTo()}"
-            android:text="@string/next" />
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/error_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_connection_error"
+            android:visibility="gone"
+            tools:ignore="ContentDescription" />
+
+
+        <LinearLayout
+            android:id="@+id/contentPosters"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"
+            android:orientation="vertical"
+            android:paddingBottom="40dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/header_posters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="6dp"
+                android:padding="8dp"
+                android:text="@string/posters_header"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/post_list"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <Button
+                android:id="@+id/boton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="10dp"
+                android:onClick="@{()->firstViewModel.navigateTo()}"
+                android:text="@string/next" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

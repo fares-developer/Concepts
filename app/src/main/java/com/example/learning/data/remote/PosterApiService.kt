@@ -1,12 +1,16 @@
 package com.example.learning.data.remote
 
+import com.example.learning.data.model.Poster
+import com.example.learning.data.model.Result
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+
+//Con esto controlamos los estados de las peticiones
+enum class PosterApiStatus { LOADING, ERROR, DONE }
 
 //Url base para las peticiones al servicio REST
 private const val baseUrl: String = "https://api.unsplash.com/"
@@ -25,13 +29,10 @@ private val retrofit = Retrofit.Builder()
 //Interfaz que define cómo retrofit se comunica con el servicio web
 interface PosterApiService {
 
-    @GET("search/photos")
-    fun getProperties(
-        @Query("query") queryReq: String,
-        @Query("orientation") orientationReq: String,
+    @GET("topics/food-drink/photos")
+    suspend fun getFoodDrinkPosters(
         @Query("client_id") apiKey: String
-
-    ): Call<String>
+    ): List<Poster>
 }
 
 object PosterApi {

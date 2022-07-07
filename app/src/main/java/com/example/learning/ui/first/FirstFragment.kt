@@ -11,11 +11,18 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.learning.R
+import com.example.learning.data.local.LocalDataSource
 import com.example.learning.data.local.PosterDatabase
+import com.example.learning.data.remote.PosterApi
+import com.example.learning.data.remote.PosterApiStatus
+import com.example.learning.data.remote.RemoteDataSource
 import com.example.learning.databinding.FragmentFirstBinding
 import com.example.learning.presentation.first.FirstViewModel
+import com.example.learning.repository.PosterRepositoryImp
 import com.example.learning.ui.first.adapter.PosterAdapter
 import com.example.learning.ui.first.adapter.PosterListener
+import com.example.learning.utils.show
+import com.example.learning.utils.toPosterEntityList
 
 class FirstFragment : Fragment() {
 
@@ -35,10 +42,16 @@ class FirstFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
 
-        //Inicialización del viewModel y de la instancia de BD
+        //Inyección de dependencias
         val application = requireNotNull(this.activity).application
         val database = PosterDatabase.getInstance(application).posterDatabaseDao
-        viewModelFac = FirstViewModel.FirstViewModelFactory(application, database)
+
+        val repositoryImp = PosterRepositoryImp(
+            RemoteDataSource(PosterApi.retrofitService),
+            LocalDataSource(database)
+        )
+
+        viewModelFac = FirstViewModel.FirstViewModelFactory(application, repositoryImp)
         viewModel = ViewModelProvider(this, viewModelFac)[FirstViewModel::class.java]
         binding.firstViewModel = viewModel
 
@@ -48,10 +61,29 @@ class FirstFragment : Fragment() {
             Toast.makeText(this.requireContext(), "Has pulsado la Card $it ", Toast.LENGTH_SHORT)
                 .show()
         })
+
         binding.postList.adapter = adapter
         viewModel.posters.observe(viewLifecycleOwner) {
             it?.let {
-                adapter.submitList(it) //Esto indica a listAdapter que una nueva versión de la lista
+                adapter.submitList(it.toPosterEntityList()) //Esto indica a listAdapter que una nueva versión de la lista
+            }
+        }
+
+        viewModel.status.observe(viewLifecycleOwner) {
+            when (it!!) {
+                PosterApiStatus.LOADING -> {
+                    binding.progresBar.show(binding.contentPosters, binding.errorImage,true)
+                }
+                PosterApiStatus.ERROR -> binding.errorImage.show(
+                    binding.contentPosters,
+                    binding.progresBar,
+                    true
+                )
+                PosterApiStatus.DONE -> binding.contentPosters.show(
+                    binding.progresBar,
+                    binding.errorImage,
+                    true
+                )
             }
         }
 
@@ -64,7 +96,7 @@ class FirstFragment : Fragment() {
         return binding.root
     }
 
-     private fun navigateTo() {
+    private fun navigateTo() {
         findNavController().navigate(
             FirstFragmentDirections.actionFirstFragmentToSecondFragment()
         )

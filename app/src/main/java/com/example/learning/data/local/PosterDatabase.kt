@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.learning.data.model.Poster
+import com.example.learning.data.model.PosterEntity
 
-@Database(entities = [Poster::class], version = 1, exportSchema = false)
+@Database(entities = [PosterEntity::class], version = 1, exportSchema = false)
 abstract class PosterDatabase : RoomDatabase() {
 
     abstract val posterDatabaseDao: PosterDatabaseDao

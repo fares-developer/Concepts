@@ -1,23 +1,33 @@
 package com.example.learning.utils
 
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.databinding.BindingAdapter
-import com.bumptech.glide.Glide
+import android.view.View
 import com.example.learning.data.model.Poster
+import com.example.learning.data.model.PosterEntity
 
+fun Poster.toPosterEntity(): PosterEntity = PosterEntity(
+    id = this.id,
+    author = this.user.name,
+    postDownloads = this.likes,
+    postPath = this.urls.full
+)
 
-@BindingAdapter("ComposeAuthor")
-fun TextView.composeAuthor(poster: Poster) {
-    this.text = poster.author
+fun List<Poster>.toPosterEntityList(): List<PosterEntity> {
+    val arr = ArrayList<PosterEntity>()
+    this.forEach {
+        arr.add(it.toPosterEntity())
+        it.toPosterEntity()
+    }
+    return arr.toList()
 }
 
-@BindingAdapter("ComposeDownloads")
-fun TextView.composeDownloads(poster: Poster) {
-    this.text = poster.postDownloads.toString()
+fun View.show(view1: View? = null, view2: View? = null, hideOthers: Boolean = false) {
+
+    this.visibility = View.VISIBLE
+
+    if (hideOthers) {
+        view1?.hide()
+        view2?.hide()
+    }
 }
 
-@BindingAdapter("ComposeImage")
-fun ImageView.composeImage(poster: Poster) {
-    Glide.with(this.context).load(poster.postPath).into(this)
-}
+fun View.hide() { this.visibility = View.GONE }

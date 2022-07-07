@@ -7,8 +7,12 @@
 
         <variable
             name="poster"
-            type="com.example.learning.data.model.Poster" />
-        
+            type="com.example.learning.data.model.PosterEntity" />
+
+        <variable
+            name="viewModel"
+            type="com.example.learning.presentation.first.FirstViewModel" />
+
         <variable
             name="clickListener"
             type="com.example.learning.ui.first.adapter.PosterListener" />
@@ -17,17 +21,33 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/post"
         style="@style/Widget.Material3.CardView.Outlined"
-        android:layout_width="200dp"
+        android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_margin="20dp"
-        app:cardCornerRadius="16dp"
         android:onClick="@{()-> clickListener.onClick(poster)}"
+        app:cardCornerRadius="16dp"
         app:cardElevation="8dp">
+
+        <!--<ProgressBar
+            android:id="@+id/progres_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/error_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_connection_error"
+            android:visibility="gone" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/post_image"
@@ -62,8 +82,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="8dp"
-                    app:ComposeDownloads="@{poster}"
                     android:paddingBottom="8dp"
+                    app:ComposeDownloads="@{poster}"
                     tools:text="Downloads: 111.444" />
 
             </LinearLayout>

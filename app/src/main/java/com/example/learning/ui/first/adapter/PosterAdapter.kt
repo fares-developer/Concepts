@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.learning.data.model.Poster
+import com.example.learning.data.model.PosterEntity
 import com.example.learning.databinding.PostItemViewBinding
 
 //ListAdapter avisa al daptador cuando se actualiza la lista de items
 class PosterAdapter(val clickListener: PosterListener) :
-    ListAdapter<Poster, PosterAdapter.ViewHolder>(PosterDiffCallback()) {
+    ListAdapter<PosterEntity, PosterAdapter.ViewHolder>(PosterDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
@@ -24,7 +24,7 @@ class PosterAdapter(val clickListener: PosterListener) :
     class ViewHolder private constructor(itemView: PostItemViewBinding) :
         RecyclerView.ViewHolder(itemView.root) {
 
-        fun bind(poster: Poster, clickListener: PosterListener) {
+        fun bind(poster: PosterEntity, clickListener: PosterListener) {
             binding.clickListener = clickListener
             binding.poster = poster
             binding.executePendingBindings()
@@ -46,18 +46,18 @@ class PosterAdapter(val clickListener: PosterListener) :
 /**
  * Esta clase es para trabajar con DiffUtil
  */
-class PosterDiffCallback : DiffUtil.ItemCallback<Poster>() {
+class PosterDiffCallback : DiffUtil.ItemCallback<PosterEntity>() {
 
-    override fun areItemsTheSame(oldItem: Poster, newItem: Poster): Boolean {
+    override fun areItemsTheSame(oldItem: PosterEntity, newItem: PosterEntity): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Poster, newItem: Poster): Boolean {
+    override fun areContentsTheSame(oldItem: PosterEntity, newItem: PosterEntity): Boolean {
         return oldItem == newItem
     }
 }
 
-class PosterListener(val clickListener: (id: Long) -> Unit) {
+class PosterListener(val clickListener: (id: String) -> Unit) {
 
-    fun onClick(poster: Poster) = clickListener(poster.id)
+    fun onClick(poster: PosterEntity) = clickListener(poster.id)
 }

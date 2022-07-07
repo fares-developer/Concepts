@@ -1,13 +1,18 @@
 package com.example.learning.data.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.squareup.moshi.Json
 
-@Entity
 data class Poster(
-    @PrimaryKey val id: Long = 0L,
-    @ColumnInfo(name = "pos_author") val author: String?,
-    @ColumnInfo(name = "pos_downloads") val postDownloads: Int?,
-    @ColumnInfo(name = "pos_path") val postPath:String?
+    @Json(name = "id")
+    val id: String,
+    @Json(name = "alt_description")
+    val altDescription: String? = "",
+    @Json(name = "liked_by_user")
+    val likedByUser: Boolean,
+    @Json(name = "likes")
+    val likes: Int,
+    @Json(name = "urls")
+    val urls: Urls,
+    @Json(name = "user")
+    val user: User,
 )
