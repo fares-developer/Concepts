@@ -7,8 +7,10 @@ import com.example.learning.data.model.PosterEntity
 fun Poster.toPosterEntity(): PosterEntity = PosterEntity(
     id = this.id,
     author = this.user.name,
-    postDownloads = this.likes,
-    postPath = this.urls.full
+    postLikes = this.likes,
+    postUrl = this.urls.full,
+    postColorImage = this.color,
+    postDescription = this.description
 )
 
 fun List<Poster>.toPosterEntityList(): List<PosterEntity> {

@@ -1,7 +1,7 @@
 package com.example.learning.repository
 
 import com.example.learning.data.local.LocalDataSource
-import com.example.learning.data.model.Poster
+import com.example.learning.data.model.PosterEntity
 import com.example.learning.data.remote.RemoteDataSource
 import com.example.learning.utils.toPosterEntity
 
@@ -17,14 +17,22 @@ class PosterRepositoryImp(
 
 ) : PosterRepository {
 
-    override suspend fun getAllPosters(): List<Poster> = remoteDataSource.getFoodDrinkPosters()
-
-    override suspend fun insertPosters(): List<Poster> {
-        val lista = arrayListOf<Poster>()
-        remoteDataSource.getFoodDrinkPosters().forEach {
+    override suspend fun getAllPosters(): List<PosterEntity> {
+        val lista = arrayListOf<PosterEntity>()
+        localDatasource.getAllPosters().forEach {
             lista.add(it)
-            localDatasource.insertPoster(it.toPosterEntity())
         }
         return lista.toList()
+    }
+
+    override suspend fun insertPosters() {
+        remoteDataSource.getFoodDrinkPosters().forEach {
+            localDatasource.insertPoster(it.toPosterEntity())
+        }
+    }
+
+    //Esto método se encarga de pasar el poster con el id que se le pasa
+    suspend fun getPoster(identifier: String): PosterEntity {
+        return getAllPosters().filter { it.id.equals(identifier) }[0]
     }
 }

@@ -17,12 +17,15 @@ class PosterAdapter(val clickListener: PosterListener) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position)!!,clickListener)
+        val item = getItem(position)
+        holder.bind(item, clickListener)
     }
 
 
     class ViewHolder private constructor(itemView: PostItemViewBinding) :
         RecyclerView.ViewHolder(itemView.root) {
+
+        val binding = itemView
 
         fun bind(poster: PosterEntity, clickListener: PosterListener) {
             binding.clickListener = clickListener
@@ -32,11 +35,11 @@ class PosterAdapter(val clickListener: PosterListener) :
 
         companion object { //Para que pueda acceder cualquier ViewHolder
 
-            private lateinit var binding: PostItemViewBinding
+            // private lateinit var binding: PostItemViewBinding
 
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                binding = PostItemViewBinding.inflate(layoutInflater, parent, false)
+                val binding = PostItemViewBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }
@@ -57,7 +60,7 @@ class PosterDiffCallback : DiffUtil.ItemCallback<PosterEntity>() {
     }
 }
 
-class PosterListener(val clickListener: (id: String) -> Unit) {
+class PosterListener(val clickListener: (poster: PosterEntity) -> Unit) {
 
-    fun onClick(poster: PosterEntity) = clickListener(poster.id)
+    fun onClick(poster: PosterEntity) = clickListener(poster)
 }

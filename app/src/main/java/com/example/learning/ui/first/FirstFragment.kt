@@ -1,5 +1,6 @@
 package com.example.learning.ui.first
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.learning.R
 import com.example.learning.data.local.LocalDataSource
 import com.example.learning.data.local.PosterDatabase
+import com.example.learning.data.model.PosterEntity
 import com.example.learning.data.remote.PosterApi
 import com.example.learning.data.remote.PosterApiStatus
 import com.example.learning.data.remote.RemoteDataSource
@@ -22,7 +24,6 @@ import com.example.learning.repository.PosterRepositoryImp
 import com.example.learning.ui.first.adapter.PosterAdapter
 import com.example.learning.ui.first.adapter.PosterListener
 import com.example.learning.utils.show
-import com.example.learning.utils.toPosterEntityList
 
 class FirstFragment : Fragment() {
 
@@ -35,12 +36,12 @@ class FirstFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         Log.i("Fragment", "FirstFragment Created")
+        requireActivity().setTheme(R.style.Theme_LearningApp)
 
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_first, container, false)
 
         //Esto nos permite eliminar el observer y hace que la vista se actualice automáticamente
         binding.lifecycleOwner = viewLifecycleOwner
-
 
         //Inyección de dependencias
         val application = requireNotNull(this.activity).application
@@ -58,47 +59,41 @@ class FirstFragment : Fragment() {
 
         //Asignación del adapter y carga de los post desde base de datos
         val adapter = PosterAdapter(PosterListener {
-            Toast.makeText(this.requireContext(), "Has pulsado la Card $it ", Toast.LENGTH_SHORT)
-                .show()
+            navigateTo(it)
         })
 
         binding.postList.adapter = adapter
         viewModel.posters.observe(viewLifecycleOwner) {
             it?.let {
-                adapter.submitList(it.toPosterEntityList()) //Esto indica a listAdapter que una nueva versión de la lista
+                adapter.submitList(it) //Esto indica a listAdapter que una nueva versión de la lista
             }
         }
 
-        viewModel.status.observe(viewLifecycleOwner) {
-            when (it!!) {
-                PosterApiStatus.LOADING -> {
-                    binding.progresBar.show(binding.contentPosters, binding.errorImage,true)
-                }
-                PosterApiStatus.ERROR -> binding.errorImage.show(
-                    binding.contentPosters,
-                    binding.progresBar,
-                    true
-                )
-                PosterApiStatus.DONE -> binding.contentPosters.show(
-                    binding.progresBar,
-                    binding.errorImage,
-                    true
-                )
-            }
-        }
-
-        viewModel.navigatTo.observe(viewLifecycleOwner) {
-            if (it) {
-                navigateTo()
-            }
-        }
-
+        viewModel.status.observe(viewLifecycleOwner) {observeStatus(it)}
         return binding.root
     }
 
-    private fun navigateTo() {
+    private fun observeStatus(it: PosterApiStatus?) {
+        when (it!!) {
+            PosterApiStatus.LOADING -> {
+                binding.progresBar.show(binding.contentPosters, binding.errorImage, true)
+            }
+            PosterApiStatus.ERROR -> binding.errorImage.show(
+                binding.contentPosters,
+                binding.progresBar,
+                true
+            )
+            PosterApiStatus.DONE -> binding.contentPosters.show(
+                binding.progresBar,
+                binding.errorImage,
+                true
+            )
+        }
+    }
+
+    private fun navigateTo(poster:PosterEntity) {
         findNavController().navigate(
-            FirstFragmentDirections.actionFirstFragmentToSecondFragment()
+            FirstFragmentDirections.actionFirstFragmentToSecondFragment(poster)
         )
     }
 

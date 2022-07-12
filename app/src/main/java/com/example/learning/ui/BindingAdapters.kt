@@ -1,7 +1,10 @@
 package com.example.learning.utils
 
+import android.graphics.Color
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.example.learning.data.model.PosterEntity
@@ -13,23 +16,22 @@ fun TextView.composeAuthor(poster: PosterEntity) {
 
 @BindingAdapter("ComposeDownloads")
 fun TextView.composeDownloads(poster: PosterEntity) {
-    this.text = poster.postDownloads.toString()
+    this.text = poster.postLikes.toString()
 }
 
 @BindingAdapter("ComposeImage")
 fun ImageView.composeImage(poster: PosterEntity) {
-    Glide.with(this.context).load(poster.postPath).into(this)
+    Glide.with(this.context).load(poster.postUrl).into(this)
 }
 
-/*@BindingAdapter("ListenStatus")
-fun CardView.ListenStatus(status: PosterApiStatus? = PosterApiStatus.LOADING) {
-    when (status) {
-        PosterApiStatus.ERROR -> {
-            this.getChildAt(1).show(this.getChildAt(0), this.getChildAt(2), true)
-        }
-        PosterApiStatus.DONE -> {
-            this.getChildAt(2).show(this.getChildAt(0), this.getChildAt(1), true)
-        }
-        else -> { this.getChildAt(0).show(this.getChildAt(1), this.getChildAt(2),true) }
+@BindingAdapter("imageUrl")
+fun ImageView.bindImage(imgUrl: String?) {
+    imgUrl?.let {
+        Glide.with(this.context).load(it).into(this)
     }
-}*/
+}
+
+@BindingAdapter("setColor")
+fun View.setColor(poster: PosterEntity) {
+
+}

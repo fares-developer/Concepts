@@ -29,7 +29,7 @@ private val retrofit = Retrofit.Builder()
 //Interfaz que define cómo retrofit se comunica con el servicio web
 interface PosterApiService {
 
-    @GET("topics/food-drink/photos")
+    @GET("topics/food-drink/photos?per_page=40")
     suspend fun getFoodDrinkPosters(
         @Query("client_id") apiKey: String
     ): List<Poster>

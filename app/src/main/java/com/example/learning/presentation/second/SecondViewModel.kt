@@ -1,20 +1,34 @@
 package com.example.learning.presentation.second
 
-import android.util.Log
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
+import com.example.learning.data.model.PosterEntity
+import com.example.learning.repository.PosterRepositoryImp
+import kotlinx.coroutines.launch
 
-class SecondViewModel:ViewModel() {
+class SecondViewModel(
+    private val posterEntity: PosterEntity,
+    private val repositoryImp: PosterRepositoryImp
+
+) : ViewModel() {
+
+    private var _poster = MutableLiveData<PosterEntity>()
+    val poster: LiveData<PosterEntity> get() = _poster
 
     init {
-        Log.i("ViewModel","SecondViewModel Created")
+        viewModelScope.launch {
+            _poster.value = posterEntity
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
-    class SecondViewModelFactory : ViewModelProvider.Factory {
+    class SecondViewModelFactory(
+        private val posterEntity: PosterEntity?,
+        private val repositoryImp: PosterRepositoryImp
+
+    ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(SecondViewModel::class.java)) {
-                return SecondViewModel() as T
+                return SecondViewModel(posterEntity!!, repositoryImp) as T
             }
 
             throw IllegalArgumentException("No se reconoce el Factory")

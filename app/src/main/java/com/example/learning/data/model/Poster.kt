@@ -15,4 +15,8 @@ data class Poster(
     val urls: Urls,
     @Json(name = "user")
     val user: User,
+    @Json(name = "color")
+    val color: String,
+    @Json(name = "description")
+    val description: String?
 )

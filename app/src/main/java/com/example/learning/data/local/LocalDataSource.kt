@@ -5,7 +5,7 @@ import com.example.learning.data.model.PosterEntity
 
 class LocalDataSource(private val database:PosterDatabaseDao) {
 
-     fun getAllPosters(): LiveData<List<PosterEntity>> = database.getAllPosters()
+     suspend fun getAllPosters(): List<PosterEntity> = database.getAllPosters()
 
      suspend fun insertPoster(poster: PosterEntity) {
          database.insertPoster(poster)

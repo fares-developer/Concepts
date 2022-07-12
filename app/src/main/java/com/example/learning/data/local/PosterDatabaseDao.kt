@@ -8,7 +8,7 @@ import com.example.learning.data.model.PosterEntity
 interface PosterDatabaseDao {
 
     @Query("SELECT * FROM poster")
-    fun getAllPosters(): LiveData<List<PosterEntity>>
+    suspend fun getAllPosters(): List<PosterEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPoster(poster: PosterEntity)
